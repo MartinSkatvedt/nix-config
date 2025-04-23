@@ -1,0 +1,28 @@
+[[default-session]]
+name = "Bacon"
+
+[[session]]
+name = "Default"
+
+[[session]]
+name = "Tmux-Config"
+startup_command = "nvim ~/.tmux.conf"
+
+[[session]]
+name = "Installer"
+path = "~/repos/installer"
+startup_script = "~/.config/sesh/splitAndVim.sh"
+
+[[session]]
+name = "pdf-service"
+path = "~/repos/pdf-service"
+
+[[session]]
+name = "API-Gateway"
+path = "~/repos/api-gateway"
+startup_script = "~/.config/sesh/splitAndVim.sh"
+
+[[session]]
+name = "Dotfiles"
+path = "~/dotfiles"
+startup_command = "nvim ~/.tmux.conf"

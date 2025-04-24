@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
+{ inputs }:
 { config, pkgs, ... }:
 
 {
@@ -105,11 +105,20 @@
     nodejs
     go
 
+    inputs.kolide-launcher
+
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
   # For autocompletion of system packages
   environment.pathsToLink = [ "/share/zsh" ];
+
+  environment.etc."kolide-k2/secret" = {
+    mode = "0600";
+    text = "<SECRET>";
+  };
+
+  services.kolide-launcher.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

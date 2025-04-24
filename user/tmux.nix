@@ -10,25 +10,22 @@
     recursive = true;
   };
 
-  # tmux-powerline config files
-  home.file.".config/tmux-powerline/" = {
-    source = ../config/tmux-powerline;
-    recursive = true;
-  };
-
   programs.tmux = {
     enable = true;
     keyMode = "vi";
     clock24 = true;
+    sensibleOnTop = true;
 
-    plugins = with pkgs.tmuxPlugins;
-      [
-        #"tmux-plugins/tmux-sensible"
-        tmux-powerline
-
-      ];
+    plugins = with pkgs.tmuxPlugins; [
+      tmux-powerline
+      {
+        plugin = power-theme;
+        extraConfig = "set -g @tmux_power_theme 'everforest'";
+      }
+    ];
 
     extraConfig = ''
+
             set-option -g update-environment "PATH"
 
             bind h select-pane -L
@@ -46,7 +43,7 @@
       		--bind 'tab:down,btab:up' \
       		--bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
       		--bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
-      		--bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c)' \
+      		--bind 'ctrl-g:change-prompt(⚙️   )+reload(sesh list -c)' \
       		--bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list)'
           )\""
     '';

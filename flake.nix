@@ -13,8 +13,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, kolide-launcher, ... }@inputs:
+  outputs = inputs@{ self, nixpkgs, home-manager, kolide-launcher, ... }:
     let
+
+      userSettings = {
+        username = "martin";
+        dotfilesDir = "~/.dotfiles"; # absolute path of the local repo
+        git = {
+          userName = "Martin Skatvedt";
+          userEmail = "martin.skatvedt@disruptive-technologies.com";
+          signingKey =
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF7ypPYl6R+y3Q65sCe3XHupmDCZgr/TZ9wKevZfCVuh";
+        };
+      };
+
       lib = nixpkgs.lib;
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -28,15 +40,20 @@
           inherit system;
           inherit pkgs;
           modules = [
-            (import ./configuration.nix { inherit inputs; })
+            ./configuration.nix
             kolide-launcher.nixosModules.kolide-launcher
           ];
+          specialArgs = {
+            inherit inputs;
+            inherit userSettings;
+          };
         };
       };
       homeConfigurations = {
         martin = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [ ./home.nix ];
+          extraSpecialArgs = { inherit userSettings; };
         };
       };
     };

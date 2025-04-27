@@ -1,4 +1,4 @@
-{ userSettings, ... }:
+{ pkgs, userSettings, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -16,6 +16,8 @@
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "24.11"; # Please read the comment before changing.
+
+  home.packages = with pkgs; [ slack ];
 
   home.sessionVariables = { GIT_EDITOR = "nvim"; };
 

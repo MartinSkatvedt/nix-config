@@ -11,5 +11,6 @@
     ./fzf.nix
     ./fonts.nix
     ./1password.nix
+    ./keyboard.nix
   ];
 }

@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, userSettings, ... }:
 
 {
   imports = [ # Include the results of the hardware scan.
@@ -9,9 +9,14 @@
   ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  #boot.loader.grub.enable = true;
+  #boot.loader.grub.device = "/dev/sda";
+  #boot.loader.grub.useOSProber = true;
+
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
 
   networking.hostName = "yoshi"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -23,7 +28,11 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot =
+    true; # powers up the default Bluetooth controller on boot
+
+  # Set your time zone.D758-8337
   time.timeZone = "Europe/Oslo";
 
   # Select internationalisation properties.
@@ -65,7 +74,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -105,17 +114,38 @@
     go
 
     inputs.kolide-launcher
-
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  # Enables the 1Password CLI
+  programs._1password = { enable = true; };
+
+  # Enables the 1Password desktop app
+  programs._1password-gui = {
+    enable = true;
+    # this makes system auth etc. work properly
+    polkitPolicyOwners = [ userSettings.username ];
+  };
+
+  services.onepassword-secrets = {
+    enable = true;
+    users = [ userSettings.username ]; # Users that need secret access
+    tokenFile = "/etc/opnix-token"; # Default location
+    configFile = (userSettings.dotfilesDirAbsolute + "/config/secrets.json");
+    outputDir = "/var/lib/opnix/secrets";
+  };
+
+  environment.etc."kolide-k2/secret" = {
+    mode = "0600";
+    source = "/var/lib/opnix/secrets/kolide-k2/secret";
+  };
 
   # For autocompletion of system packages
   environment.pathsToLink = [ "/share/zsh" ];
 
-  environment.etc."kolide-k2/secret" = {
-    mode = "0600";
-    text = "<SECRET>";
-  };
+  #environment.etc."kolide-k2/secret" = {
+  #mode = "0600";
+
+  #};
 
   services.kolide-launcher.enable = true;
 

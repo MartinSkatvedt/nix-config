@@ -1,24 +1,26 @@
 {
-  description = "Setup flake";
+  description = "My NixOS configuration!";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.11";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     kolide-launcher = {
-      url = "github:/kolide/nix-agent/main";
+      url = "github:/kolide/nix-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    opnix = { url = "github:brizzbuzz/opnix/main"; };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, kolide-launcher, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, kolide-launcher, opnix, ... }:
     let
 
       userSettings = {
         username = "martin";
         dotfilesDir = "~/.dotfiles"; # absolute path of the local repo
+        dotfilesDirAbsolute = "/home/martin/.dotfiles";
         git = {
           userName = "Martin Skatvedt";
           userEmail = "martin.skatvedt@disruptive-technologies.com";
@@ -40,6 +42,7 @@
           inherit system;
           inherit pkgs;
           modules = [
+            opnix.nixosModules.default
             ./configuration.nix
             kolide-launcher.nixosModules.kolide-launcher
           ];
@@ -52,7 +55,7 @@
       homeConfigurations = {
         martin = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = [ ./home.nix ];
+          modules = [ opnix.homeManagerModules.default ./home.nix ];
           extraSpecialArgs = { inherit userSettings; };
         };
       };

@@ -20,11 +20,15 @@
       tmux-powerline
       {
         plugin = power-theme;
-        extraConfig = "set -g @tmux_power_theme 'everforest'";
+        extraConfig = "set -g @tmux_power_theme 'colour4'";
       }
     ];
 
     extraConfig = ''
+            # Set the default terminal terminfo
+            set -g default-terminal "tmux-256color"
+            # True colour support
+            set -as terminal-overrides ",xterm*:Tc"
 
             set-option -g update-environment "PATH"
 

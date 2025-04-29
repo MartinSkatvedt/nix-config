@@ -62,9 +62,13 @@
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "no";
-    variant = "";
+  services.xserver = {
+    xkb = {
+      layout = "no";
+      variant = "";
+    };
+    xkbOptions = "caps:swapescape";
+
   };
 
   # Configure console keymap

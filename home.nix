@@ -19,8 +19,6 @@
 
   home.packages = with pkgs; [ slack ];
 
-  home.sessionVariables = { GIT_EDITOR = "nvim"; };
-
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }

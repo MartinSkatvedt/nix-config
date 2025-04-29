@@ -2,27 +2,26 @@
 name = "Bacon"
 
 [[session]]
-name = "Default"
-
-[[session]]
-name = "Tmux-Config"
-startup_command = "nvim ~/.tmux.conf"
-
-[[session]]
 name = "Installer"
 path = "~/repos/installer"
-startup_script = "~/.config/sesh/splitAndVim.sh"
+startup_command = "nvim ."
 
 [[session]]
-name = "pdf-service"
+name = "PDF-Service"
 path = "~/repos/pdf-service"
+startup_command = "nvim ."
 
 [[session]]
 name = "API-Gateway"
 path = "~/repos/api-gateway"
-startup_script = "~/.config/sesh/splitAndVim.sh"
+startup_command = "nvim ."
+
+[[session]]
+name = "Device-Export"
+path = "~/repos/device-export"
+startup_command = "nvim ."
 
 [[session]]
 name = "Dotfiles"
-path = "~/dotfiles"
-startup_command = "nvim ~/.tmux.conf"
+path = "~/.dotfiles"
+startup_command = "nvim ."

@@ -4,7 +4,7 @@
 
   home.packages = with pkgs; [ zsh-powerlevel10k zsh-fzf-tab ];
 
-  home.file.".config/zsh/.p10k.zsh" = { source = ../config/zsh/p10k.zsh; };
+  home.file.".config/zsh/.p10k.zsh" = { source = ../../config/zsh/p10k.zsh; };
 
   programs.zsh = {
     dotDir = ".config/zsh";

@@ -6,7 +6,7 @@
 
   # Sesh config files
   home.file.".config/sesh/" = {
-    source = ../config/sesh;
+    source = ../../config/sesh;
     recursive = true;
   };
 

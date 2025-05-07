@@ -1,29 +1,18 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-{ pkgs, inputs, userSettings, ... }:
+{ pkgs, inputs, systemSettings, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+  imports = [
+    ./hosts/${systemSettings.hostname}
+    ./modules/core/1password.nix
+    ./modules/core/kolide.nix
+    ./modules/core/1password-secrets.nix
+    ./modules/core/boot-loader/${systemSettings.boot-loader}.nix
+    ./modules/core/stylix.nix
   ];
 
-  # Bootloader.
-  #boot.loader.grub.enable = true;
-  #boot.loader.grub.device = "/dev/sda";
-  #boot.loader.grub.useOSProber = true;
+  networking.hostName = systemSettings.hostname;
 
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-  };
-
-  networking.hostName = "yoshi"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -50,6 +39,13 @@
     LC_TIME = "nb_NO.UTF-8";
   };
 
+  # Enable cachix for hyprland
+  nix.settings = {
+    substituters = [ "https://hyprland.cachix.org" ];
+    trusted-public-keys =
+      [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -60,6 +56,16 @@
   # Enable KDE plasma 6
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+    # set the flake package
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    # make sure to also set the portal package, so that they are in sync
+    portalPackage =
+      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+  };
 
   # Configure keymap in X11
   services.xserver = {
@@ -117,41 +123,32 @@
     nodejs
     go
 
-    inputs.kolide-launcher
+    dunst # Wayland notification daemon
+    libnotify # notification support
+
+    rofi-wayland # Wayland rofi
+
+    networkmanagerapplet
+    pavucontrol # For Editing Audio Levels & Devices
+
   ];
 
-  # Enables the 1Password CLI
-  programs._1password = { enable = true; };
-
-  # Enables the 1Password desktop app
-  programs._1password-gui = {
-    enable = true;
-    # this makes system auth etc. work properly
-    polkitPolicyOwners = [ userSettings.username ];
-  };
-
-  services.onepassword-secrets = {
-    enable = true;
-    users = [ userSettings.username ]; # Users that need secret access
-    tokenFile = "/etc/opnix-token"; # Default location
-    configFile = (userSettings.dotfilesDirAbsolute + "/config/secrets.json");
-    outputDir = "/var/lib/opnix/secrets";
-  };
-
-  environment.etc."kolide-k2/secret" = {
-    mode = "0600";
-    source = "/var/lib/opnix/secrets/kolide-k2/secret";
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts-emoji
+      noto-fonts-cjk-sans
+      font-awesome
+      symbola
+      material-icons
+      fira-code
+      fira-code-symbols
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.hack
+    ];
   };
 
   # For autocompletion of system packages
   environment.pathsToLink = [ "/share/zsh" ];
-
-  #environment.etc."kolide-k2/secret" = {
-  #mode = "0600";
-
-  #};
-
-  services.kolide-launcher.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

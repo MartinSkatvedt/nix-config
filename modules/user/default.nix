@@ -9,8 +9,11 @@
     ./git.nix
     ./ssh.nix
     ./fzf.nix
-    ./fonts.nix
     ./1password.nix
     ./keyboard.nix
+    ./stylix.nix
+    ./hyprland
+    ./swayc.nix
+    ./wlogout
   ];
 }

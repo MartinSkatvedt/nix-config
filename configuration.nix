@@ -123,6 +123,8 @@
     nodejs
     go
 
+    openssl
+
     dunst # Wayland notification daemon
     libnotify # notification support
 

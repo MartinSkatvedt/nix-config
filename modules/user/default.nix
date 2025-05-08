@@ -15,5 +15,6 @@
     ./hyprland
     ./swayc.nix
     ./wlogout
+    ./fastfetch
   ];
 }

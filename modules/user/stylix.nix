@@ -9,11 +9,31 @@ in {
 
     image = background-image;
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+    base16Scheme = {
+      base00 = "327219"; # Background - Dark Green
+      base01 = "6cb44c"; # Foreground - Green
+      base02 = "e9e9f4"; # Text foreground - Offwhite
+      base03 = "626483";
+      base04 = "62d6e8";
+      base05 = "e9e9f4";
+      base06 = "f1f2f8";
+      base07 = "f7f7fb";
+      base08 = "ea51b2";
+      base09 = "b45bcf";
+
+      base0A = "00b5ff"; # Accent - Light blue
+      base0B = "6cb44c"; # Accent - Yoshi green
+      base0C = "00b5ff"; # Accent -Yoshi green accent -Light blue
+      base0D = "9999cc"; # Accent - Yoshi red accent - Green
+      base0E = "b33618"; # Accent - Yoshi red
+      base0F = "0062e0"; # Accent -Yoshi red accent - Blue
+    };
 
     targets = {
       waybar.enable = false;
       firefox.enable = false;
       hyprland.enable = false;
+      tmux.enable = false;
     };
 
     polarity = "dark";

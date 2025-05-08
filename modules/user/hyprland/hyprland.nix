@@ -1,7 +1,7 @@
-{ systemSettings, pkgs, ... }:
+{ systemSettings, pkgs, inputs, ... }:
 let
   inherit (import ../../../hosts/${systemSettings.hostname}/config.nix)
-    background-image;
+    background-image terminal browser;
 in {
 
   home.packages = with pkgs;
@@ -36,6 +36,12 @@ in {
 
         "nm-applet --indicator"
         "sleep 1.5 && swww img ${background-image}"
+
+        #Startup apps
+        "[workspace 1 silent] ${terminal}"
+        "[workspace 1 silent] ${browser}"
+        "[workspace 2 silent] 1password"
+        "[workspace 3 silent] slack"
       ];
 
       windowrulev2 = [
@@ -89,7 +95,7 @@ in {
       monitor=,preferred,auto,auto
     '';
 
-    #plugins = [ inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars ];
+    plugins = [ inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars ];
   };
 
   # hint Electron apps to use Wayland:

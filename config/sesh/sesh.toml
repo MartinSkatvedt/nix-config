@@ -22,6 +22,12 @@ path = "~/repos/device-export"
 startup_command = "nvim ."
 
 [[session]]
+name = "Studio"
+path = "~/repos/dt-studio-frontend"
+startup_command = "nvim ."
+
+[[session]]
 name = "Dotfiles"
 path = "~/.dotfiles"
 startup_command = "nvim ."
+

@@ -48,6 +48,10 @@
         #Autosuggest config
         export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#3b8af7, bg=bold,underline"
         bindkey '^ ' autosuggest-accept
+
+        typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+        fastfetch
       '')
     ];
     shellAliases = {

@@ -8,8 +8,7 @@ pkgs.buildGoModule rec {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     rev = "v${version}";
-    sha256 =
-      "sha256-e/TPCli2wXyzEpn84hZdtVaAmXJK+d0vMRLilXohiN8="; # Use `nix-prefetch-url` or leave as `lib.fakeSha256`
+    sha256 = "sha256-e/TPCli2wXyzEpn84hZdtVaAmXJK+d0vMRLilXohiN8=";
   };
 
   vendorHash = "sha256-Des02yenoa6am0xIqto7xlOWHh44F5EBVEhi9t+v644=";

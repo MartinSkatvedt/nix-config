@@ -1,6 +1,6 @@
 {
   browser = "google-chrome-stable";
-  terminal = "konsole";
+  terminal = "kitty";
 
   background-image = ../../wallpapers/group.jpg;
 

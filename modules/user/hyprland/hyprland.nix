@@ -1,4 +1,4 @@
-{ systemSettings, pkgs, inputs, ... }:
+{ systemSettings, pkgs, ... }:
 let
   inherit (import ../../../hosts/${systemSettings.hostname}/config.nix)
     background-image terminal browser;

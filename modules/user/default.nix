@@ -17,5 +17,6 @@
     ./wlogout
     ./fastfetch
     ./wofi.nix
+    ./kitty.nix
   ];
 }

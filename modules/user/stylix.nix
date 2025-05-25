@@ -16,6 +16,7 @@ in {
       hyprland.enable = false;
       hyprlock.enable = false;
       tmux.enable = false;
+      kitty.enable = true;
     };
 
     polarity = "dark";

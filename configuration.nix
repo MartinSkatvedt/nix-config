@@ -83,6 +83,11 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  security = {
+    polkit.enable = true;
+    pam.services.hyprlock = { };
+  };
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -133,6 +138,10 @@
     networkmanagerapplet
     pavucontrol # For Editing Audio Levels & Devices
 
+    brightnessctl # Display brightness control
+
+    hyprshot # Screenshot utility
+    killall
   ];
 
   fonts = {

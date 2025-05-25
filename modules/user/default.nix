@@ -16,5 +16,6 @@
     ./swayc.nix
     ./wlogout
     ./fastfetch
+    ./wofi.nix
   ];
 }

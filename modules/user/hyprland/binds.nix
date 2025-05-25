@@ -13,12 +13,13 @@ in {
         ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
         ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-        ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
-        ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
+        ",XF86MonBrightnessUp, exec, brightnessctl -e2 -n2 set 5%+"
+        ",XF86MonBrightnessDown, exec, brightnessctl -e2 -n2 set 5%-"
       ];
       bind = [
         "$mod, Q, exec, ${terminal}"
         "$mod,W,exec,${browser}"
+        "$mod,P,exec, hyprpicker"
 
         "$mod, S, exec, rofi -show drun -show-icons"
 
@@ -33,6 +34,14 @@ in {
         "$mod, right, movefocus, r"
         "$mod, up, movefocus, u"
         "$mod, down, movefocus, d"
+
+        # Move focus with mod + hjkl (vim binds)
+        "$mod, h, movefocus, l"
+        "$mod, l, movefocus, r"
+        "$mod, k, movefocus, u"
+        "$mod, j, movefocus, d"
+
+        "$mod, PRINT, exec, hyprshot -m region"
 
       ] ++ (
         # workspaces

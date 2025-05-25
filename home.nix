@@ -26,6 +26,9 @@
 
     gnumake
 
+    hyprpicker # color-picker
+    swayimg # image viewer
+
     (import ./local/protoc-gen-grpc-gateway.nix { inherit pkgs; })
   ];
 

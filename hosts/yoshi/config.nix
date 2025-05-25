@@ -2,6 +2,6 @@
   browser = "google-chrome-stable";
   terminal = "konsole";
 
-  background-image = ../../wallpapers/yoshi.png;
+  background-image = ../../wallpapers/group.jpg;
 
 }

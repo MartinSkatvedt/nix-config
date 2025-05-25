@@ -28,14 +28,62 @@ in {
     systemd.variables = [ "--all" ];
 
     settings = {
+      general = {
+        border_size = 0;
+        gaps_out = 8;
+        gaps_in = 4;
+        layout = "master";
+        resize_on_border = true;
+      };
+
+      decoration = {
+        rounding = 8;
+        dim_inactive = true;
+        dim_strength = 0.2;
+        blur = {
+          enabled = true;
+          size = 5;
+          passes = 3;
+          ignore_opacity = false;
+        };
+        shadow = {
+          enabled = true;
+          range = 8;
+          render_power = 3;
+          color = "rgba(00000080)";
+          offset = "4 4";
+
+        };
+      };
+
+      input = {
+        kb_layout = "no";
+        kb_options = "caps:swapescape";
+      };
+
+      gestures = { workspace_swipe = true; };
+
+      misc = {
+        disable_hyprland_logo = true;
+        disable_splash_rendering = true;
+        layers_hog_keyboard_focus = true;
+        initial_workspace_tracking = 0;
+        mouse_move_enables_dpms = true;
+        key_press_enables_dpms = true;
+        enable_swallow = false;
+        vrr = 3;
+        animate_manual_resizes = true;
+      };
+      xwayland = { force_zero_scaling = true; };
+
+      cursor = { hide_on_key_press = true; };
+      ecosystem = { no_donation_nag = true; };
 
       exec-once = [
-        "killall -q waybar;sleep .5 && waybar"
         "killall -q swayc;sleep .5 && swayc"
-        "killall -q swww;sleep .5 && swww-daemon"
+        "killall -q swww-daemon;sleep .5 && swww-daemon"
 
         "nm-applet --indicator"
-        "sleep 1.5 && swww img ${background-image}"
 
         #Startup apps
         "[workspace 1 silent] ${terminal}"
@@ -44,58 +92,24 @@ in {
         "[workspace 3 silent] slack"
       ];
 
+      exec = [
+        "killall -q .waybar-wrapped;sleep .5 && waybar"
+        "sleep 1.5 && swww img ${background-image}"
+      ];
+
       windowrulev2 = [
         "tag +settings, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
 
         "center, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
       ];
 
-      misc = {
-        layers_hog_keyboard_focus = true;
-        initial_workspace_tracking = 0;
-        mouse_move_enables_dpms = true;
-        key_press_enables_dpms = false;
-        disable_hyprland_logo = true;
-        disable_splash_rendering = true;
-        enable_swallow = false;
-        vfr = true; # Variable Frame Rate
-        vrr =
-          2; # Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
-        # Screen flashing to black momentarily or going black when app is fullscreen
-        # Try setting vrr to 0
-      };
-
-      decoration = {
-        rounding = 10;
-        blur = {
-          enabled = true;
-          size = 5;
-          passes = 3;
-          ignore_opacity = false;
-          new_optimizations = true;
-        };
-        shadow = {
-          enabled = true;
-          range = 4;
-          render_power = 3;
-          color = "rgba(1a1a1aee)";
-        };
-      };
-
-      # https://wiki.hyprland.org/Configuring/Variables/#gestures
-      gestures = { workspace_swipe = true; };
-
-      input = {
-        kb_layout = "no";
-        kb_options = "caps:swapescape";
-      };
     };
 
     extraConfig = ''
       monitor=,preferred,auto,auto
     '';
 
-    plugins = [ inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars ];
+    #plugins = [ inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars ];
   };
 
   # hint Electron apps to use Wayland:

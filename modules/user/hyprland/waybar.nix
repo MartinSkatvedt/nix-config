@@ -14,8 +14,10 @@ with lib; {
       modules-center = [ "clock" "idle_inhibitor" ];
       modules-left = [ "custom/startmenu" "hyprland/workspaces" "tray" ];
       modules-right = [
+        "network"
         "custom/notification"
         "battery"
+        "backlight"
         "pulseaudio"
         "cpu"
         "memory"
@@ -40,6 +42,9 @@ with lib; {
           "title<.*youtube.*>" = "";
           "title<.*github.*>" = "";
           "title<.*gitlab.*>" = "";
+          "title<.*bitbucket.*>" = "";
+          "title<.*Calendar.*>" = "";
+          "title<.*NixOS.*>" = "󱄅";
 
           "class<google-chrome>" = "";
           "class<slack>" = "";
@@ -51,7 +56,7 @@ with lib; {
 
       "clock" = {
         format =
-          "<span color='#${config.lib.stylix.colors.base0A}'>  </span> {:%H:%M} ";
+          "<span color='#${config.lib.stylix.colors.base08}'>  </span> {:%H:%M} ";
 
         tooltip = true;
         tooltip-format = ''
@@ -66,13 +71,13 @@ with lib; {
       "memory" = {
         interval = 5;
         format =
-          "<span color='#${config.lib.stylix.colors.base0B}'>  </span> {used:0.1f}G/{total:0.1f}G ";
+          "<span color='#${config.lib.stylix.colors.base0C}'>  </span> {used:0.1f}G/{total:0.1f}G ";
         tooltip = true;
       };
       "cpu" = {
         interval = 5;
         format =
-          "<span color='#${config.lib.stylix.colors.base0C}'>  </span> {usage}% ";
+          "<span color='#${config.lib.stylix.colors.base0B}'>  </span> {usage}% ";
         tooltip = true;
       };
       "disk" = {
@@ -84,18 +89,19 @@ with lib; {
       "network" = {
         format-icons = [ "󰤯" "󰤟" "󰤢" "󰤥" "󰤨" ];
         format-ethernet = " {bandwidthDownOctets}";
-        format-wifi = "{icon} {signalStrength}%";
+        format-wifi =
+          "<span color='#${config.lib.stylix.colors.base0C}'> {icon} </span> {signalStrength}%";
         format-disconnected = "󰤮";
-        tooltip = false;
+        tooltip = true;
       };
       "tray" = { spacing = 12; };
       "pulseaudio" = {
         format =
-          "<span color='#${config.lib.stylix.colors.base0D}'> {icon} </span> {volume}% {format_source}";
-        #format = "{icon} {volume}% {format_source}";
+          "<span color='#${config.lib.stylix.colors.base0A}'> {icon} </span> {volume}% <span color='#${config.lib.stylix.colors.base0A}'> {format_source} </span>";
         format-bluetooth = "{volume}% {icon} {format_source}";
         format-bluetooth-muted = " {icon} {format_source}";
-        format-muted = " {format_source}";
+        format-muted =
+          "<span color='#${config.lib.stylix.colors.base0A}'>  {format_source} </span>";
         format-source = "";
         format-source-muted = "";
         format-icons = {
@@ -109,9 +115,17 @@ with lib; {
         };
         on-click = "sleep 0.1 && pavucontrol";
       };
+
+      "backlight" = {
+        interval = 1;
+        format = "{icon} {percent}%";
+        format-icons = [ "🔅" "🔆" ];
+
+      };
       "custom/exit" = {
         tooltip = false;
-        format = "";
+        format =
+          "<span color='#${config.lib.stylix.colors.base08}'>  </span> ";
         on-click = "sleep 0.1 && wlogout";
       };
       "custom/startmenu" = {
@@ -131,17 +145,18 @@ with lib; {
         tooltip = false;
 
         format =
-          "<span color='#${config.lib.stylix.colors.base0A}'> {icon} </span> {}";
+          "<span color='#${config.lib.stylix.colors.base09}'> {icon} </span> {}";
         format-icons = {
-          notification = "<span foreground='red'><sup></sup></span>";
+          notification = "<span background-selected='red'><sup></sup></span>";
           none = "";
-          dnd-notification = "<span foreground='red'><sup></sup></span>";
+          dnd-notification =
+            "<span background-selected='red'><sup></sup></span>";
           dnd-none = "";
           inhibited-notification =
-            "<span foreground='red'><sup></sup></span>";
+            "<span background-selected='red'><sup></sup></span>";
           inhibited-none = "";
           dnd-inhibited-notification =
-            "<span foreground='red'><sup></sup></span>";
+            "<span background-selected='red'><sup></sup></span>";
           dnd-inhibited-none = "";
         };
         return-type = "json";
@@ -155,9 +170,10 @@ with lib; {
           warning = 30;
           critical = 15;
         };
-        format = "<span color='#FF9F0A'> {icon} </span> {capacity}% ";
-        format-charging = " {capacity}%";
-        format-plugged = "󱘖 {capacity}%";
+        interval = 1;
+        format = "<span color='#008000'> {icon} </span> {capacity}% ";
+        format-charging = "<span color='#FF9F0A'>  </span> {capacity}%";
+        format-plugged = "<span color='#FF9F0A'> 󱘖 </span> {capacity}%";
         format-icons = [ "" "" "" "" "" ];
         on-click = "";
         tooltip = true;
@@ -167,9 +183,11 @@ with lib; {
     }];
 
     style = concatStrings [''
-      @define-color text-foreground #${config.lib.stylix.colors.base02};
       @define-color background #${config.lib.stylix.colors.base00};
-      @define-color foreground #${config.lib.stylix.colors.base01};
+      @define-color background-alt #${config.lib.stylix.colors.base01};
+      @define-color background-selected #${config.lib.stylix.colors.base02};
+
+      @define-color default-text #${config.lib.stylix.colors.base05};
 
       * {
         font-family: "JetBrainsMono NF Mono";
@@ -179,96 +197,62 @@ with lib; {
       }
 
       window#waybar {
-        background-color: transparent;
-        color: @text-foreground;
+        background-color: @background;
+        border-radius: 12px;
+        color: @default-text;
       }
 
+      #custom-startmenu, #workspaces, #tray {
+        padding: 0px 4px;
+      }
       #custom-startmenu {
         font-size: 20px;
-        border-radius: 12px;
-        background: @background;
-        padding: 8px 20px 8px 12px;
-      }
-
-      #workspaces {
-        border-radius: 12px;
-        background: @background;
-        margin: 0px 8px 0px 8px;
-      }
-
-      #workspaces label {
-        font-size: 12px;
-      }
-
-      #workspaces button:first-child {
-        border-radius: 12px 0px 0px 12px;
         padding-left: 12px;
-      }
-
-      #workspaces button:last-child {
-        border-radius: 0px 12px 12px 0px;
         padding-right: 12px;
       }
 
-      #workspaces button {
-        padding: 0 8px 0 8px;
-        background: transparent;
-        color: @text-foreground;
-        border-radius: 0px;
-      }
-      #workspaces button.active {
-        background-color: @foreground;
-      }
-      #workspaces button:hover {
-        background-color: @foreground;
+      #workspaces {
+        margin-right: 24px;
+        margin-left: 8px;
       }
 
-      #tray {
-        background: @background;
+      #workspaces button {
+        background: transparent;
+        border-radius: 0px;
         padding: 8px;
-        border-radius: 12px;
+        padding-right: 12px;
+      }
+      #workspaces button.active {
+        background-color: @background-selected;
+      }
+      #workspaces button:hover {
+        background-color: @background-alt;
       }
 
 
       #clock, #idle_inhibitor {
-        background: @background;
-        padding: 8px;
+        padding: 0px 4px;
       }
-
       #clock {
         font-weight: bold;
-        border-radius: 12px 0px 0px 12px;
-        padding-left: 12px;
       }
 
-      #idle_inhibitor {
-        border-radius: 0px 12px 12px 0px;
+
+      #custom-notification, #battery, #pulseaudio, #cpu, #memory, #disk, #custom-exit {
+        padding: 0px 4px;
+      }
+      #custom-exit {
         padding-right: 12px;
+        padding-left: 4px;
       }
-
 
       tooltip {
-        background: #${config.lib.stylix.colors.base00};
-        border: 1px solid #${config.lib.stylix.colors.base05};
+        background: @background;
+        border: 1px solid @default-text;
         border-radius: 12px;
       }
       tooltip label {
-        color: #${config.lib.stylix.colors.base05};
-      }
-
-      #custom-notification, #battery, #pulseaudio, #cpu, #memory, #disk, #custom-exit {
-        background: @background;
-        padding: 8px;
-      }
-
-      #custom-notification {
-        border-radius: 12px 0px 0px 12px;
-        padding-left: 12px;
-      }
-
-      #custom-exit {
-        border-radius: 0px 12px 12px 0px;
-        padding-right: 12px;
+        color: @default-text;
       }
     ''];
 
